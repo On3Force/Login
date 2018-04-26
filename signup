@@ -1,0 +1,37 @@
+<?php
+//LOGIN
+//error_reporting(E_ALL);
+
+header('Content-type: application/json');
+header('Content-type: text/plain;charset=UTF-8');
+$link = mysqli_connect('iberia.coumfe5q4pny.us-west-2.rds.amazonaws.com', 'iberiadashboard', 'franlikespwd2017');
+mysqli_select_db($link,'iberiadashboard');
+//FROM FORM 
+ if(isset($_POST["username"]) && isset($_POST["password"]))
+    {
+        $user = $_POST["username"];
+		$pass = $_POST["password"];
+		$company=$_POST["company"];
+	}
+//check unique email
+//BLOWFISH
+/*  function better_crypt($input, $rounds = 7)
+  {
+    $salt = "";
+    $salt_chars = array_merge(range('A','Z'), range('a','z'), range(0,9));
+    for($i=0; $i < 22; $i++) {
+      $salt .= $salt_chars[array_rand($salt_chars)];
+    }
+    return crypt($input, sprintf('$2a$%02d$', $rounds) . $salt);
+  }*/
+$password = crypt($pass);
+//insert 
+$sql= "INSERT INTO usuarios (name,pass,company,userType) VALUES ('".$user."','".$password."','".$company."','2');"; 
+$result = mysqli_query($link,$sql) or die ("<div><p align='center'>Registro incorrecto.</p></div><br><a href='index.php>Volver</a>'");
+  while ($fila = mysqli_fetch_assoc($result)) {
+		//dcryption + enter
+		$_SESSION['name']=$row->name;
+    	echo 'OK,/dashboard.php';
+	}else
+
+?>

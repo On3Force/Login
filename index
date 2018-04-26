@@ -1,0 +1,231 @@
+<script src="jquery.min.js"></script>
+<head>
+<script>
+function CheckLogin(){
+
+var username = document.getElementById("username").value;
+var password = document.getElementById("password").value;
+var companies = document.getElementById("companies").value;
+
+
+$.ajax({
+url: 'login.php',
+type: 'POST',
+data: { 
+        'username': username,
+        'password': password,
+		'companies':companies
+    },
+success:function(data) {
+	console.log(data)
+	var output = data.split(",");
+	att=output[1];
+	if(output[0]=="OK"){
+		document.location.href=output[1];
+	}else{
+		//error
+		//attempts
+		//alert(output[1]+' more attempts.');
+	}
+}	
+});
+}
+function Register(){
+	var username = document.getElementById("username").value;
+	var password = document.getElementById("password").value;
+	var companies = document.getElementById("companies").value;
+	
+	$.ajax({
+	url: 'signin.php',
+	type: 'POST',
+	data: { 
+        'username': username,
+        'password': password,
+		'companies':companies
+    },
+	success:function(data) {
+	console.log(data)
+	var output = data.split(",");
+	att=output[1];
+	if(output[0]=="OK"){
+		document.location.href=output[1];
+	}else{
+		//error
+		//attempts
+		//alert(output[1]+' more attempts.');
+	}
+}	
+});
+	
+}
+</script>
+<?php 
+//Load Companies
+$sql="SELECT distinct company from users order by company";
+$companies="";
+$result = mysqli_query($link,$sql) or die ("Query error: " . mysqli_error());
+while ($row = mysqli_fetch_object($result)) {
+    if($row->id==1){$selected=" SELECTED ";}else{$selected="";}
+    $companies.="<option ".$selected." value='".$row->company."'>".$row->company."</option>";
+}
+?>
+<style type='text/css'>
+.bodyfixed { position: fixed;
+       overflow-y:scroll;}
+@font-face {
+    font-family: 'Roboto-Thin';
+    src: url('Roboto-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+html, body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+   font-family: 'Roboto-Thin', Helvetica, sans-serif;
+}
+.welcome{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -250px;
+    margin-left: -300px;
+    width: 600px;
+    height: 500px;
+    background-color:#f7f7f7;
+    z-index:99999;
+}
+.welcometitle{
+float:left;
+width:100%;
+height:76px;
+background-color:#ffffff;
+border-bottom:1px solid #e5e5e5;
+text-align:center;
+line-height:76px;
+font-size:36px;
+font-family: Roboto-Thin,Helvetica, sans-serif;
+color: #f6bb42;
+font-weight: 100;
+}
+ #welcomeContent{
+ font-family: Arial,Helvetica, sans-serif;
+float:left;
+padding-left:0px;
+width:100%;
+padding-top:20px;
+padding-bottom:20px;
+line-height:150%;
+color:#3d3e41;
+}
+
+#welcomeContentText{
+padding-left:75px;
+padding-right:75px;
+}
+.background{
+background-color:#f15e2e;
+opacity:1!important;
+-moz-opacity:0.70; 
+width:100%;
+height:100%;
+z-index:9999;
+position:fixed;
+top:0;
+left:0;
+}
+.objectiveButton{
+width:100%;
+text-align:center;
+padding:0;
+line-height:20px;
+margin:0;
+font-size:24px;
+padding-top:30px;
+}
+.forgotPassword{
+width:100%;
+text-align:center;
+padding:0;
+line-height:20px;
+margin:0;
+font-size:12px;
+padding-top:30px;
+font-family: Arial,Helvetica, sans-serif;
+}
+.condition_value{
+width:200px;height:20px;border:0;border-bottom: 1px solid #bbbbbb;padding:5px;font-size: 18px;border-radius: 0;-webkit-appearance: none;
+background-color:transparent;margin-top:5px;color:#000000;margin-left:20px;text-align:center;
+}
+.myButtonSkip {
+
+        background-color:#f6bb42;        
+        display:inline-block;
+        color:#ffffff;
+        font-family:arial;
+        font-size:13px;
+        font-weight:normal;
+        padding:9px 31px;
+        text-decoration:none;
+        height:15px;
+    }
+    .myButtonSkip:hover {  
+        background-color:#3d3e41;
+    }
+    .myButtonSkip:active {
+        position:relative;
+        top:1px;
+    }
+    .divNext{
+    width:100%;
+    text-align:center;
+    }
+    .myButtonNext {
+
+        background-color:#71c341;        
+        display:inline-block;
+        color:#ffffff;
+        font-family:arial;
+        font-size:13px;
+        font-weight:normal;
+        padding:9px 31px;
+        text-decoration:none;
+        height:15px;
+    }
+    .myButtonNext:hover {  
+        background-color:#3d3e41;
+    }
+    .myButtonNext:active {
+        position:relative;
+        top:1px;
+    }
+</style>
+</head>
+<body class='bodyfixed'>
+<div style='position:fixed;top:0;left:0'><img src='logoiberia.png' height=36 style='margin:15px;'></div>
+<div style='position:fixed;top:0;right:0'><img src='iberiaplus.png' height=36 style='margin:15px;'><img src='iberionbusiness.png' height=36 style='margin:15px;'></div>
+<div class='welcome' id='welcome'>
+<div class='welcometitle'>
+Dashboard - Email Marketing
+</div>
+<div  id="welcomeContent">
+        <p class='objectiveButton'>
+       Please type in your username and password to login:</p>
+       <p class='objectiveButton' style='padding-bottom:25px;'>
+        <input type="text" id="username" value="" class="condition_value" placeholder="your username">
+        </p>
+        <p class='objectiveButton' style='padding-bottom:25px;'>
+        <input type="password" id="password" value="" class="condition_value" placeholder="your password">
+        </p>
+		<p class='objectiveButton' style='padding-bottom:25px;'>
+        <select name="companies" id="companies" class="field-select" multiple>
+		<?php echo $companies; ?>
+		</select>
+        </p>
+  </div>
+<div class='divNext'><a href='#' class='myButtonNext' onclick='CheckLogin();'>LOGIN</a></div>
+<div class='divNext'><a href='#' class='myButtonNext' onclick='Register();'>SIGN</a></div>
+</div>
+</div>
+</body>
